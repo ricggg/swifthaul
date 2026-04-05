@@ -1,14 +1,22 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 
 const stats = [
-  { value: 2000, suffix: "+", label: "Businesses Served" },
+  { value: 2000, suffix: "+", label: "Businesses Served", decimal: false },
   { value: 98.4, suffix: "%", label: "On-Time Delivery Rate", decimal: true },
-  { value: 40, suffix: "+", label: "Countries Covered" },
-  { value: 1.2, suffix: "M+", label: "Shipments Delivered", decimal: true },
+  { value: 40,   suffix: "+", label: "Countries Covered", decimal: false },
+  { value: 1.2,  suffix: "M+", label: "Shipments Delivered", decimal: true },
+];
+
+const partnerLogos = [
+  "DHL Global",
+  "FedEx Partner",
+  "Amazon SFP",
+  "Shopify Plus",
+  "Maersk Line",
+  "DB Schenker",
 ];
 
 function Counter({
@@ -18,7 +26,7 @@ function Counter({
 }: {
   value: number;
   suffix: string;
-  decimal?: boolean;
+  decimal: boolean;
 }) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
@@ -26,7 +34,7 @@ function Counter({
 
   useEffect(() => {
     if (!isInView) return;
-    const duration = 2000;
+    const duration = 1800;
     const steps = 60;
     const increment = value / steps;
     let current = 0;
@@ -52,48 +60,46 @@ function Counter({
 
 export default function ProofBar() {
   return (
-    <section className="bg-slate-900 py-16">
+    <section className="bg-slate-900 py-16 border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+
+        {/* Stats */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-14">
           {stats.map((stat, i) => (
             <motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.5 }}
+              transition={{ delay: i * 0.1, duration: 0.5, ease: "easeOut" as const }}
               className="text-center"
             >
-              <div className="text-4xl sm:text-5xl font-extrabold text-orange-500 mb-2">
+              <div className="text-4xl sm:text-5xl font-extrabold text-orange-500 mb-2 tabular-nums">
                 <Counter
                   value={stat.value}
                   suffix={stat.suffix}
                   decimal={stat.decimal}
                 />
               </div>
-              <div className="text-slate-400 text-sm font-medium">
-                {stat.label}
-              </div>
+              <div className="text-slate-400 text-sm font-medium">{stat.label}</div>
             </motion.div>
           ))}
         </div>
 
-        {/* Client logos */}
-        <div className="mt-12 pt-10 border-t border-slate-700">
-          <p className="text-center text-slate-500 text-sm mb-8">
-            Trusted by leading companies across industries
+        {/* Partner logos */}
+        <div className="border-t border-slate-800 pt-10">
+          <p className="text-center text-slate-600 text-xs uppercase tracking-widest font-semibold mb-8">
+            Integration & carrier partners
           </p>
-          <div className="flex flex-wrap justify-center items-center gap-8 opacity-50">
-            {["DHL Global", "FedEx Partner", "Amazon SFP", "Shopify Plus", "Maersk", "DB Schenker"].map(
-              (logo) => (
-                <div
-                  key={logo}
-                  className="text-slate-400 font-bold text-sm tracking-widest uppercase"
-                >
-                  {logo}
-                </div>
-              )
-            )}
+          <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-10">
+            {partnerLogos.map((logo) => (
+              <div
+                key={logo}
+                className="text-slate-600 font-bold text-xs sm:text-sm tracking-widest uppercase hover:text-slate-400 transition-colors cursor-default"
+              >
+                {logo}
+              </div>
+            ))}
           </div>
         </div>
       </div>

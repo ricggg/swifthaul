@@ -10,20 +10,43 @@
     --color-light: #f8fafc;
   }
 
-  * {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
   }
 
   html {
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     background-color: #ffffff;
     color: #0f172a;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.5;
+  }
+
+  /* ✅ Keyboard accessibility — visible focus ring */
+  :focus-visible {
+    outline: 2px solid #f97316;
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  /* Smooth image rendering */
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* Prevent layout shift on scrollbar */
+  html {
+    scrollbar-gutter: stable;
   }
 }

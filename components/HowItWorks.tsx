@@ -1,36 +1,46 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ClipboardList, CalculatorIcon, PackageCheck, MapPin } from "lucide-react";
+import type { Variants } from "framer-motion";
+import { ClipboardList, Calculator, PackageCheck, MapPin } from "lucide-react";
+
+const stepVariants: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.14,
+      duration: 0.5,
+      ease: "easeOut" as const,
+    },
+  }),
+};
 
 const steps = [
   {
     icon: ClipboardList,
-    step: "01",
     title: "Request a Quote",
     description:
-      "Fill out our quick online form with your shipment details — origin, destination, weight, and timeline. No phone tag required.",
+      "Fill out our quick form with your shipment details — origin, destination, weight, and timeline. No phone tag. No sales pressure.",
   },
   {
-    icon: CalculatorIcon,
-    step: "02",
-    title: "Receive Your Custom Plan",
+    icon: Calculator,
+    title: "Receive Your Plan",
     description:
-      "Our team reviews your requirements and sends back a tailored logistics plan with transparent pricing within 2 business hours.",
+      "Our team reviews your requirements and delivers a tailored logistics plan with fully transparent pricing within 2 business hours.",
   },
   {
     icon: PackageCheck,
-    step: "03",
     title: "We Pick Up & Process",
     description:
-      "SwiftHaul handles pickup, documentation, and routing. Your shipment is loaded and moving — with a tracking ID sent instantly.",
+      "SwiftHaul handles pickup, documentation, and routing. Your shipment moves immediately with a tracking ID sent to you instantly.",
   },
   {
     icon: MapPin,
-    step: "04",
     title: "Track & Receive",
     description:
-      "Monitor your shipment live from our tracking portal. Get automated updates via SMS or email until it's safely delivered.",
+      "Monitor your shipment live from our portal. Get automated SMS and email updates at every milestone until safe delivery.",
   },
 ];
 
@@ -38,58 +48,65 @@ export default function HowItWorks() {
   return (
     <section className="py-24 bg-white" id="how-it-works">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.5, ease: "easeOut" as const }}
           className="text-center mb-16"
         >
-          <span className="text-orange-500 font-semibold text-sm uppercase tracking-wider">
+          <span className="text-orange-500 font-semibold text-xs uppercase tracking-widest">
             Simple Process
           </span>
-          <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 mt-3 mb-4">
+          <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 mt-3 mb-4 leading-tight">
             From Quote to Delivery in 4 Steps
           </h2>
-          <p className="text-slate-600 text-lg max-w-2xl mx-auto">
+          <p className="text-slate-500 text-lg max-w-2xl mx-auto leading-relaxed">
             We've removed every friction point so your logistics runs on
             autopilot from day one.
           </p>
         </motion.div>
 
-        <div className="relative">
-          {/* Connector line (desktop) */}
-          <div className="hidden lg:block absolute top-16 left-1/8 right-1/8 h-0.5 bg-orange-100 z-0" />
+        {/* Steps */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
-            {steps.map((step, i) => {
-              const Icon = step.icon;
-              return (
-                <motion.div
-                  key={step.step}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.15, duration: 0.5 }}
-                  className="flex flex-col items-center text-center"
-                >
-                  <div className="relative mb-6">
-                    <div className="w-16 h-16 bg-orange-50 border-2 border-orange-200 rounded-2xl flex items-center justify-center group-hover:bg-orange-500 transition-colors">
-                      <Icon className="w-7 h-7 text-orange-500" />
-                    </div>
-                    <span className="absolute -top-2 -right-2 w-6 h-6 bg-orange-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
-                      {i + 1}
-                    </span>
+          {/* Connector line desktop */}
+          <div className="hidden lg:block absolute top-10 left-[12.5%] right-[12.5%] h-px bg-orange-100 z-0" />
+
+          {steps.map((step, i) => {
+            const Icon = step.icon;
+            return (
+              <motion.div
+                key={step.title}
+                custom={i}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={stepVariants}
+                className="relative z-10 flex flex-col items-center text-center"
+              >
+                {/* Icon circle */}
+                <div className="relative mb-6">
+                  <div className="w-20 h-20 bg-orange-50 border-2 border-orange-100 rounded-2xl flex items-center justify-center shadow-sm">
+                    <Icon className="w-8 h-8 text-orange-500" />
                   </div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-3">
-                    {step.title}
-                  </h3>
-                  <p className="text-slate-600 text-sm leading-relaxed">
-                    {step.description}
-                  </p>
-                </motion.div>
-              );
-            })}
-          </div>
+                  {/* Step number badge */}
+                  <span className="absolute -top-2.5 -right-2.5 w-7 h-7 bg-orange-500 text-white text-xs font-extrabold rounded-full flex items-center justify-center shadow-md">
+                    {i + 1}
+                  </span>
+                </div>
+
+                <h3 className="text-base font-bold text-slate-900 mb-3 leading-snug">
+                  {step.title}
+                </h3>
+                <p className="text-slate-500 text-sm leading-relaxed max-w-[220px]">
+                  {step.description}
+                </p>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
